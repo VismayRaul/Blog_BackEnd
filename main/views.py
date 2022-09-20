@@ -12,7 +12,7 @@ from django.contrib.auth.hashers import check_password
 
 @api_view(['GET', 'POST'])
 def reg_user(request):
-    if request.method == "POST":
+    # if request.method == "POST":
         try:
             data = request.data
             serializer = User_RegistrationSerializer(data=data)
@@ -40,8 +40,21 @@ def reg_user(request):
             print(e)
             return Response({
                 'status': False,
-                'message': "Something went Wrong!",
+                'message': "Something went Wrong!"
             })
+
+
+@api_view (['GET'])
+def get_user(request, id=None):
+    if id is not None:
+        user = User_Registration.objects.filter(id=id)
+        serializer = User_RegistrationSerializer(user, many=True)
+        return Response(serializer.data)
+    else:
+        users = User_Registration.objects.all()
+        serializer = User_RegistrationSerializer(users, many=True)
+        return Response(serializer.data)
+
 
 # @api_view(['GET','POST'])
 # def user_login(request):
@@ -59,28 +72,28 @@ def reg_user(request):
 
 @api_view(['GET', 'POST'])
 def reg_blog(request):
-    if request.method == "POST":
-        try:
-            data = request.data
-            serializer = User_BlogSerializer(data=data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response({
-                    "status": True,
-                    "message": "You blog was saved successfully",
-                    "data": serializer.data
-                })
+    # if request.method == "POST":
+    try:
+        data = request.data
+        serializer = User_BlogSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
             return Response({
-                'status': False,
-                'message': "Invalid Data",
-                'data': serializer.errors
+                "status": True,
+                "message": "You blog was saved successfully",
+                "data": serializer.data
             })
-        except Exception as e:
-            print(e)
-            return Response({
-                'status': False,
-                'message': "Something went Wrong!",
-            })
+        return Response({
+            'status': False,
+            'message': "Invalid Data",
+            'data': serializer.errors
+        })
+    except Exception as e:
+        print(e)
+        return Response({
+            'status': False,
+            'message': "Something went Wrong!",
+        })
 
 # class UserList(generics.ListCreateAPIView):
 #     serializer_class = User_RegistrationSerializer

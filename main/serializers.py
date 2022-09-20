@@ -10,14 +10,14 @@ class User_RegistrationSerializer(serializers.ModelSerializer):
 
 
     def createuser(self, validated_data):
-                    user = User_Registration.objects.create(
-                        FirstName=validated_data['FirstName'],
-                        LastName=validated_data['LastName'],
-                        Email=validated_data['Email'],
-                        Password=make_password(validated_data['Password'])
-                    )
-                    user.save()
-                    return user
+        user = User_Registration.objects.create(
+            FirstName=validated_data['FirstName'],
+            LastName=validated_data['LastName'],
+            Email=validated_data['Email'],
+            Password=make_password(validated_data['Password'])
+        )
+        user.save()
+        return user
 
 class User_BlogSerializer(serializers.ModelSerializer):
     class Meta:
